@@ -28,4 +28,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.2.1'
     // 带圆角处理的ImageView
     compile 'com.pkmmte.view:circularimageview:1.1'
+    compile 'com.jakewharton:butterknife:7.0.1'
 }
