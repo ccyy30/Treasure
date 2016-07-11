@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 放在group中是为了使用group自带的分割线-->
+    <group android:id="@+id/group1" android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_item_hide"
+            android:icon="@drawable/ic_hide"
+            android:title="@string/hide_treasure" />
+    </group>
+
+    <group android:id="@+id/group2" android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_item_my_list"
+            android:icon="@drawable/ic_my_list"
+            android:title="@string/my_list"/>
+    </group>
+
+    <group android:id="@+id/group3" android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_item_help"
+            android:icon="@drawable/ic_live_help"
+            android:title="@string/about_help"/>
+    </group>
+
+    <group android:id="@+id/group4" android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_item_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/log_out"/>
+
+    </group>
+
+    <group android:id="@+id/group5" android:checkableBehavior="single">
+
+    </group>
+
+
+</menu>
