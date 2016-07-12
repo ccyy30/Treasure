@@ -1,18 +1,17 @@
-package com.feicuedi.truesure;
+package com.feicuiedu.treasure;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.feicuedi.truesure.commons.ActivityUtils;
-import com.feicuedi.truesure.user.login.LoginActivity;
-import com.feicuedi.truesure.user.register.RegisterActivity;
+import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.user.login.LoginActivity;
+import com.feicuiedu.treasure.user.register.RegisterActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 // https://github.com/yuanchaocs/treasure.git
-
 
 public class MainActivity extends AppCompatActivity {
 

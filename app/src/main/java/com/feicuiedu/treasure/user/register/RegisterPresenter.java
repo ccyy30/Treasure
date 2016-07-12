@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.user.register;
+package com.feicuiedu.treasure.user.register;
 
 /**
  * Created by Administrator on 2016/7/12 0012.

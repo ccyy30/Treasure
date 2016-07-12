@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.user.login;
+package com.feicuiedu.treasure.user.login;
 
 /**
  * 登陆业务相关视图

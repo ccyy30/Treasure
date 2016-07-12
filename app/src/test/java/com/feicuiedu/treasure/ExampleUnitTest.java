@@ -1,4 +1,4 @@
-package com.feicuedi.truesure;
+package com.feicuedi.treasure;
 
 import org.junit.Test;
 

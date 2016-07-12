@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.user.register;
+package com.feicuiedu.treasure.user.register;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +8,9 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.feicuedi.truesure.R;
-import com.feicuedi.truesure.commons.ActivityUtils;
-import com.feicuedi.truesure.commons.RegexUtils;
+import com.feicuiedu.treasure.R;
+import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.commons.RegexUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

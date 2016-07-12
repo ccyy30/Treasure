@@ -1,4 +1,4 @@
-package com.feicuedi.truesure;
+package com.feicuiedu.treasure;
 
 import android.app.Application;
 

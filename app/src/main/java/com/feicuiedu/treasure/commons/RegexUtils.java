@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.commons;
+package com.feicuiedu.treasure.commons;
 
 import android.support.annotation.NonNull;
 

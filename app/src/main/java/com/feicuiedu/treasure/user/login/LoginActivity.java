@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.user.login;
+package com.feicuiedu.treasure.user.login;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,10 +9,10 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.feicuedi.truesure.home.HomeActivity;
-import com.feicuedi.truesure.R;
-import com.feicuedi.truesure.commons.ActivityUtils;
-import com.feicuedi.truesure.commons.RegexUtils;
+import com.feicuiedu.treasure.R;
+import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.commons.RegexUtils;
+import com.feicuiedu.treasure.home.HomeActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,7 +21,7 @@ import butterknife.OnClick;
 /** 登陆视图, 纯种视图
  *
  *  我们的登陆业务， 是不是只要针对LoginView来做就行了 */
-public class LoginActivity extends AppCompatActivity implements LoginView{
+public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Bind(R.id.et_Password) EditText etPassword;
     @Bind(R.id.et_Username) EditText etUsername;
