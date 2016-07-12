@@ -3,9 +3,11 @@ package com.feicuiedu.treasure.user.login;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,11 +20,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/** 登陆视图, 纯种视图
- *
- *  我们的登陆业务， 是不是只要针对LoginView来做就行了 */
+/**
+ * 登陆视图, 纯种视图
+ * <p/>
+ * 我们的登陆业务， 是不是只要针对LoginView来做就行了
+ */
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.et_Password) EditText etPassword;
     @Bind(R.id.et_Username) EditText etUsername;
     @Bind(R.id.btn_Login) Button btnLogin;
@@ -42,8 +47,25 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override public void onContentChanged() {
         super.onContentChanged();
         ButterKnife.bind(this);
+        // 用toolbar来更换以前的actionBar
+        setSupportActionBar(toolbar);
+        // 激活Home(左上角,内部使用的选项菜单处理的),设置其title
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getTitle());
+        }
         etPassword.addTextChangedListener(mTextWatcher);
         etUsername.addTextChangedListener(mTextWatcher);
+    }
+
+    // 选项菜单处理
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private final TextWatcher mTextWatcher = new TextWatcher() {
@@ -84,11 +106,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override public void showProgress() {
         activityUtils.hideSoftKeyboard();
-        progressDialog = ProgressDialog.show(this,"","登陆中,请稍后...");
+        progressDialog = ProgressDialog.show(this, "", "登陆中,请稍后...");
     }
 
     @Override public void hideProgress() {
-        if(progressDialog != null){
+        if (progressDialog != null) {
             progressDialog.dismiss();
         }
     }

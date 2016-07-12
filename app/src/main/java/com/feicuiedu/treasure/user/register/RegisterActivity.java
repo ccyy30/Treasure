@@ -1,16 +1,20 @@
 package com.feicuiedu.treasure.user.register;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
 import com.feicuiedu.treasure.commons.RegexUtils;
+import com.feicuiedu.treasure.home.HomeActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,20 +22,10 @@ import butterknife.OnClick;
 
 /**
  * 注册视图
- *
- * 1. 完成注册的视图
- * 2. 考虑注册相关业务及视图 (接口)
- *    要做什么功能？
- *    --> 注册
- *       --> 网络连接，验证   ------- 视图表现 (显示一个loading)
- *       --> 出错了 --- 视图表现(........)
- *       --> 通过了
- *          --> 读取，解析数据
- *              --> 出错了 --- 视图表现(........)
- *              --> 通过了（得到数据了） -- 视图表现 (进入HOME页面)
  */
 public class RegisterActivity extends AppCompatActivity implements RegisterView{
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.et_Username) EditText etUsername;
     @Bind(R.id.et_Password) EditText etPassword;
     @Bind(R.id.et_Confirm) EditText etConfirm;
@@ -52,9 +46,26 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView{
     @Override public void onContentChanged() {
         super.onContentChanged();
         ButterKnife.bind(this);
+        // 用toolbar来更换以前的actionBar
+        setSupportActionBar(toolbar);
+        // 激活Home(左上角,内部使用的选项菜单处理的),设置其title
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getTitle());
+        }
         etConfirm.addTextChangedListener(mTextWatcher); // EditText监听
         etPassword.addTextChangedListener(mTextWatcher); // EditText监听
         etUsername.addTextChangedListener(mTextWatcher); // EditText监听
+    }
+
+    // 选项菜单处理
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private final TextWatcher mTextWatcher = new TextWatcher() {
@@ -93,19 +104,29 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView{
         new RegisterPresenter(this).regiser();
     }
 
-    @Override public void navigateToHome() {
-
-    }
+    private ProgressDialog progressDialog;
 
     @Override public void showProgress() {
-
+        activityUtils.hideSoftKeyboard();
+        progressDialog = ProgressDialog.show(this,"","注册中,请稍后...");
     }
 
     @Override public void hideProgress() {
-
+        if(progressDialog != null){
+            progressDialog.dismiss();
+        }
     }
 
     @Override public void showMessage(String msg) {
+        activityUtils.showToast(msg);
+    }
 
+    @Override public void navigateToHome() {
+        activityUtils.startActivity(HomeActivity.class);
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 }
