@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.user;
+package com.feicuedi.truesure.user.login;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +16,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/** 登陆视图*/
-public class LoginActivity extends AppCompatActivity {
+/** 登陆视图, 纯种视图
+ *
+ *  我们的登陆业务， 是不是只要针对LoginView来做就行了 */
+public class LoginActivity extends AppCompatActivity implements LoginView{
 
     @Bind(R.id.et_Password) EditText etPassword;
     @Bind(R.id.et_Username) EditText etUsername;
@@ -73,7 +75,40 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         // 执行业务
-        //
+        new LoginPresenter(this).login();
+//        showProgress();
+//        执行网络连接;
+//        如果出错{
+//            hideProgress();
+//            showMessage("");
+//            return;
+//        }
+//        网络连接，数据读取
+//        如果出错{
+//            hideProgress();
+//            showMessage("");
+//            return;
+//        }
+//        if(成功){
+//            hideProgress();
+//            navigateToHome();
+//        }
+    }
+
+    @Override public void showProgress() {
+
+    }
+
+    @Override public void hideProgress() {
+
+    }
+
+    @Override public void showMessage(String msg) {
+
+    }
+
+    @Override public void navigateToHome() {
+
     }
 
     @Override protected void onDestroy() {

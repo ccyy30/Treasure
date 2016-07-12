@@ -5,13 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.feicuedi.truesure.commons.ActivityUtils;
-import com.feicuedi.truesure.user.LoginActivity;
+import com.feicuedi.truesure.user.login.LoginActivity;
 import com.feicuedi.truesure.user.RegisterActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 // https://github.com/yuanchaocs/treasure.git
+
 
 public class MainActivity extends AppCompatActivity {
 
