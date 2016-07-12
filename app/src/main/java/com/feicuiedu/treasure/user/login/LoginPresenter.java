@@ -6,6 +6,7 @@ import android.os.AsyncTask;
  * Created by Administrator on 2016/7/12 0012.
  *
  * 登陆视图业务
+ *
  */
 public class LoginPresenter {
     private LoginView loginView;
