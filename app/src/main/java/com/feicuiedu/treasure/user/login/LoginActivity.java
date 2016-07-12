@@ -1,7 +1,9 @@
 package com.feicuiedu.treasure.user.login;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.feicuiedu.treasure.MainActivity;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
 import com.feicuiedu.treasure.commons.RegexUtils;
@@ -120,7 +123,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override public void navigateToHome() {
+        // 切换到Home页面
         activityUtils.startActivity(HomeActivity.class);
+        // 关闭当前页面
+        finish();
+        // 关闭入口Main页面 (发送一个广播出去,是本地广播)
+        Intent intent = new Intent(MainActivity.ACTION_ENTER_HOME);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override protected void onDestroy() {
