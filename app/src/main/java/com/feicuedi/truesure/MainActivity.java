@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.feicuedi.truesure.commons.ActivityUtils;
 import com.feicuedi.truesure.user.login.LoginActivity;
-import com.feicuedi.truesure.user.RegisterActivity;
+import com.feicuedi.truesure.user.register.RegisterActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

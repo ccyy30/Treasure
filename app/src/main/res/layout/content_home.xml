@@ -24,17 +24,8 @@
     </android.support.v7.widget.Toolbar>
 
     <!--地图视图宝藏-->
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.feicuiedu.refactorcoreth.treasure.home.map.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar" />
+
 
     <!--列表视图宝藏-->
-    <FrameLayout
-        android:id="@+id/fragment_Container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"/>
+
 </RelativeLayout>

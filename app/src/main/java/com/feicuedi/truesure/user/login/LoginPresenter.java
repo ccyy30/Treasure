@@ -1,5 +1,7 @@
 package com.feicuedi.truesure.user.login;
 
+import android.os.AsyncTask;
+
 /**
  * Created by Administrator on 2016/7/12 0012.
  *
@@ -12,23 +14,36 @@ public class LoginPresenter {
         this.loginView = loginView;
     }
 
+    /** 本类核心业务*/
     public void login(){
-        loginView.showProgress();
-        执行网络连接;
-        如果出错{
-            loginView.hideProgress();
-            loginView.showMessage("");
-            return;
+        new LoginTask().execute();
+    }
+
+    private final class LoginTask extends AsyncTask<Void,Void,Integer>{
+        // 在doInBackground之前,UI线程来调用
+        @Override protected void onPreExecute() {
+            super.onPreExecute();
+            loginView.showProgress();
         }
-        网络连接，数据读取
-        如果出错{
-            loginView.hideProgress();
-            loginView.showMessage("");
-            return;
+        // 在onPreExecute之后, 后台线程来调用
+        @Override protected Integer doInBackground(Void... params) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                return 0;
+            }
+            return 1;
         }
-        if(成功){
-            loginView.hideProgress();
+        // 在doInBackground之后,UI线程来调用
+        @Override protected void onPostExecute(Integer aVoid) {
+            super.onPostExecute(aVoid);
+            if (aVoid == 0) {
+                loginView.showMessage("未知错误");
+                loginView.hideProgress();
+                return;
+            }
             loginView.navigateToHome();
+            loginView.hideProgress();
         }
     }
 }

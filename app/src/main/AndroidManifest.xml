@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.feicuedi.truesure"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="com.feicuedi.truesure"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:name=".TreasureAppplication"
@@ -24,8 +23,10 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".user.RegisterActivity"
+            android:name=".user.register.RegisterActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".home.HomeActivity">
         </activity>
     </application>
 

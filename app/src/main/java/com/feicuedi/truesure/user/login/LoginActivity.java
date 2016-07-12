@@ -1,5 +1,6 @@
 package com.feicuedi.truesure.user.login;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.feicuedi.truesure.home.HomeActivity;
 import com.feicuedi.truesure.R;
 import com.feicuedi.truesure.commons.ActivityUtils;
 import com.feicuedi.truesure.commons.RegexUtils;
@@ -76,39 +78,27 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         }
         // 执行业务
         new LoginPresenter(this).login();
-//        showProgress();
-//        执行网络连接;
-//        如果出错{
-//            hideProgress();
-//            showMessage("");
-//            return;
-//        }
-//        网络连接，数据读取
-//        如果出错{
-//            hideProgress();
-//            showMessage("");
-//            return;
-//        }
-//        if(成功){
-//            hideProgress();
-//            navigateToHome();
-//        }
     }
 
-    @Override public void showProgress() {
+    private ProgressDialog progressDialog;
 
+    @Override public void showProgress() {
+        activityUtils.hideSoftKeyboard();
+        progressDialog = ProgressDialog.show(this,"","登陆中,请稍后...");
     }
 
     @Override public void hideProgress() {
-
+        if(progressDialog != null){
+            progressDialog.dismiss();
+        }
     }
 
     @Override public void showMessage(String msg) {
-
+        activityUtils.showToast(msg);
     }
 
     @Override public void navigateToHome() {
-
+        activityUtils.startActivity(HomeActivity.class);
     }
 
     @Override protected void onDestroy() {

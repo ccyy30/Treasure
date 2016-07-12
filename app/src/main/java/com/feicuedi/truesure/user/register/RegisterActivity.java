@@ -1,4 +1,4 @@
-package com.feicuedi.truesure.user;
+package com.feicuedi.truesure.user.register;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +18,19 @@ import butterknife.OnClick;
 
 /**
  * 注册视图
+ *
+ * 1. 完成注册的视图
+ * 2. 考虑注册相关业务及视图 (接口)
+ *    要做什么功能？
+ *    --> 注册
+ *       --> 网络连接，验证   ------- 视图表现 (显示一个loading)
+ *       --> 出错了 --- 视图表现(........)
+ *       --> 通过了
+ *          --> 读取，解析数据
+ *              --> 出错了 --- 视图表现(........)
+ *              --> 通过了（得到数据了） -- 视图表现 (进入HOME页面)
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RegisterView{
 
     @Bind(R.id.et_Username) EditText etUsername;
     @Bind(R.id.et_Password) EditText etPassword;
@@ -79,6 +90,22 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         // 执行注册业务逻辑
-        //
+        new RegisterPresenter(this).regiser();
+    }
+
+    @Override public void navigateToHome() {
+
+    }
+
+    @Override public void showProgress() {
+
+    }
+
+    @Override public void hideProgress() {
+
+    }
+
+    @Override public void showMessage(String msg) {
+
     }
 }
