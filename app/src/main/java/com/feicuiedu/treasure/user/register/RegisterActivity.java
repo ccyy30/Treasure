@@ -27,6 +27,11 @@ import butterknife.OnClick;
 
 /**
  * 注册视图
+ *
+ * OkHttp库
+ * 是我们使用的网络连接框架基栈技术
+ *
+ *
  */
 public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresenter> implements RegisterView {
 
