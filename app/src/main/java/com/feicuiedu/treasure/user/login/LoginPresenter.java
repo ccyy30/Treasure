@@ -2,18 +2,15 @@ package com.feicuiedu.treasure.user.login;
 
 import android.os.AsyncTask;
 
+import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
+
 /**
  * Created by Administrator on 2016/7/12 0012.
  *
  * 登陆视图业务
  *
  */
-public class LoginPresenter {
-    private LoginView loginView;
-
-    public LoginPresenter(LoginView loginView){
-        this.loginView = loginView;
-    }
+public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView>{
 
     /** 本类核心业务*/
     public void login(){
@@ -24,7 +21,7 @@ public class LoginPresenter {
         // 在doInBackground之前,UI线程来调用
         @Override protected void onPreExecute() {
             super.onPreExecute();
-            loginView.showProgress();
+            getView().showProgress();
         }
         // 在onPreExecute之后, 后台线程来调用
         @Override protected Integer doInBackground(Void... params) {
@@ -39,12 +36,12 @@ public class LoginPresenter {
         @Override protected void onPostExecute(Integer aVoid) {
             super.onPostExecute(aVoid);
             if (aVoid == 0) {
-                loginView.showMessage("未知错误");
-                loginView.hideProgress();
+                getView().showMessage("未知错误");
+                getView().hideProgress();
                 return;
             }
-            loginView.navigateToHome();
-            loginView.hideProgress();
+            getView().navigateToHome();
+            getView().hideProgress();
         }
     }
 }

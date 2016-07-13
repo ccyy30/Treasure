@@ -3,8 +3,8 @@ package com.feicuiedu.treasure.user.login;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,7 +17,9 @@ import com.feicuiedu.treasure.MainActivity;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
 import com.feicuiedu.treasure.commons.RegexUtils;
+import com.feicuiedu.treasure.components.AlertDialogFragment;
 import com.feicuiedu.treasure.home.HomeActivity;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,7 +30,7 @@ import butterknife.OnClick;
  * <p/>
  * 我们的登陆业务， 是不是只要针对LoginView来做就行了
  */
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.et_Password) EditText etPassword;
@@ -59,6 +61,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         }
         etPassword.addTextChangedListener(mTextWatcher);
         etUsername.addTextChangedListener(mTextWatcher);
+    }
+
+    @NonNull @Override public LoginPresenter createPresenter() {
+        return new LoginPresenter();
     }
 
     // 选项菜单处理
@@ -93,16 +99,30 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void login() {
         // 用户名是否有效
         if (RegexUtils.verifyUsername(userName) != RegexUtils.VERIFY_SUCCESS) {
-            activityUtils.showToast(R.string.username_rules);
+            showUsernameError();
             return;
         }
         // 密码是否有效
         if (RegexUtils.verifyPassword(passWord) != RegexUtils.VERIFY_SUCCESS) {
-            activityUtils.showToast(R.string.password_rules);
+            showPasswordError();
             return;
         }
         // 执行业务
-        new LoginPresenter(this).login();
+        getPresenter().login();
+    }
+
+    // 用户名输入错误Dialog
+    private void showUsernameError(){
+        String msg = getString(R.string.username_rules);
+        AlertDialogFragment fragment = AlertDialogFragment.newInstance(R.string.username_error, msg);
+        fragment.show(getSupportFragmentManager(), "showUsernameError");
+    }
+
+    // 密码输入错误Dialog
+    private void showPasswordError(){
+        String msg = getString(R.string.password_rules);
+        AlertDialogFragment fragment = AlertDialogFragment.newInstance(R.string.password_error, msg);
+        fragment.show(getSupportFragmentManager(), "showPasswordError");
     }
 
     private ProgressDialog progressDialog;

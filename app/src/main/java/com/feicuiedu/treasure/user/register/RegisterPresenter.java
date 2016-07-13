@@ -2,6 +2,8 @@ package com.feicuiedu.treasure.user.register;
 
 import android.os.AsyncTask;
 
+import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
+
 /**
  * Created by Administrator on 2016/7/12 0012.
  *
@@ -9,13 +11,7 @@ import android.os.AsyncTask;
  *
  *
  */
-public class RegisterPresenter {
-
-    private RegisterView registerView;
-
-    public RegisterPresenter(RegisterView registerView){
-        this.registerView = registerView;
-    }
+public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView>{
 
     /** 本类核心业务*/
     public void regiser() {
@@ -26,7 +22,7 @@ public class RegisterPresenter {
         // 在doInBackground之前,UI线程来调用
         @Override protected void onPreExecute() {
             super.onPreExecute();
-            registerView.showProgress();
+            getView().showProgress();
         }
         // 在onPreExecute之后, 后台线程来调用
         @Override protected Integer doInBackground(Void... params) {
@@ -41,12 +37,12 @@ public class RegisterPresenter {
         @Override protected void onPostExecute(Integer aVoid) {
             super.onPostExecute(aVoid);
             if (aVoid == 0) {
-                registerView.showMessage("未知错误");
-                registerView.hideProgress();
+                getView().showMessage("未知错误");
+                getView().hideProgress();
                 return;
             }
-            registerView.navigateToHome();
-            registerView.hideProgress();
+            getView().navigateToHome();
+            getView().hideProgress();
         }
     }
 }
