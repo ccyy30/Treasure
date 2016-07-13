@@ -29,4 +29,6 @@ dependencies {
     // 带圆角处理的ImageView
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'com.jakewharton:butterknife:7.0.1'
+    //
+    compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
 }

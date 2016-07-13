@@ -22,6 +22,15 @@ import butterknife.ButterKnife;
 //      做部分业务,及控制视图(调度视图)
 // 业务中要持有视图对象
 
+// 分析一个项目，介绍一个项目
+
+// MVP的库
+
+// 网络连接
+// OkHttp, Retrofit
+
+// 主页面搭建
+
 public class TempActivity extends AppCompatActivity implements TempView{
 
     @Bind(R.id.listView) ListView listView;
