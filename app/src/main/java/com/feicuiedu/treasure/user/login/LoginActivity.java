@@ -98,6 +98,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @OnClick(R.id.btn_Login)
     public void login() {
+        activityUtils.hideSoftKeyboard();
         // 用户名是否有效
         if (RegexUtils.verifyUsername(userName) != RegexUtils.VERIFY_SUCCESS) {
             showUsernameError();
@@ -129,7 +130,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     private ProgressDialog progressDialog;
 
     @Override public void showProgress() {
-        activityUtils.hideSoftKeyboard();
         progressDialog = ProgressDialog.show(this, "", "登陆中,请稍后...");
     }
 

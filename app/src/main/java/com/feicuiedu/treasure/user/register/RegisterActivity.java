@@ -105,6 +105,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
 
     @OnClick(R.id.btn_Register)
     public void register() {
+        activityUtils.hideSoftKeyboard();
         // 正则进行判断输入的用户名是否有效
         if (RegexUtils.verifyUsername(username) != RegexUtils.VERIFY_SUCCESS) {
             showUsernameError();
@@ -133,10 +134,10 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
         fragment.show(getSupportFragmentManager(), "showPasswordError");
     }
 
+
     private ProgressDialog progressDialog;
 
     @Override public void showProgress() {
-        activityUtils.hideSoftKeyboard();
         progressDialog = ProgressDialog.show(this, "", "注册中,请稍后...");
     }
 

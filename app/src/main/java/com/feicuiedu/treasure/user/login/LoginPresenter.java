@@ -47,7 +47,6 @@ public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
                 }
                 return;
             }
-            getView().showMessage("网络异常");
         }
 
         @Override public void onFailure(Call<LoginResult> call, Throwable t) {

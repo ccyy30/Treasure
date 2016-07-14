@@ -1,21 +1,14 @@
 package com.feicuiedu.treasure.user.register;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.feicuiedu.treasure.net.NetClient;
 import com.feicuiedu.treasure.user.User;
-import com.google.gson.Gson;
+import com.feicuiedu.treasure.user.UserApi;
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
-import java.io.IOException;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/12 0012.
@@ -24,69 +17,48 @@ import okhttp3.Response;
  */
 public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
 
-    private Handler handler = new Handler(Looper.getMainLooper());
-
-    private Call call;
-    private Gson gson;
-
-    public RegisterPresenter() {
-        gson = new Gson();
-    }
+    private Call<RegisterResult> registerCall;
 
     /**
      * 本类核心业务
      */
     public void regiser(User user) {
-        OkHttpClient client = NetClient.getInstance().getClient();
-
-        RequestBody body = RequestBody.create(null, gson.toJson(user));
-
-        Request request = new Request.Builder()
-                .url("http://admin.syfeicuiedu.com/Handler/UserHandler.ashx?action=register")
-                .post(body)
-                .build();
-
-        call = client.newCall(request);
-        call.enqueue(callback);
+        UserApi userApi = NetClient.getInstance().getUserApi();
+        registerCall = userApi.register(user);
+        registerCall.enqueue(callback);
     }
 
-    private Callback callback = new Callback() {
-        @Override public void onFailure(Call call, IOException e) {
-            failure(e.getMessage());
-        }
-
-        @Override public void onResponse(Call call, Response response) throws IOException {
-            if (response.isSuccessful()) {
-                String jsonStr = response.body().string();
-                RegisterResult result = gson.fromJson(jsonStr, RegisterResult.class);
-                if (result.getCode() == 1) {
-                    success(result.getMsg());
+    private Callback<RegisterResult> callback = new Callback<RegisterResult>() {
+        @Override
+        public void onResponse(Call<RegisterResult> call, Response<RegisterResult> response) {
+            getView().hideProgress();
+            // 成功得到响应 (200 - 299)
+            if (response != null && response.isSuccessful()) {
+                final RegisterResult result = response.body();
+                if (result == null) {
+                    getView().showMessage("unknown error");
                     return;
                 }
-                failure(result.getMsg());
-                return;
+                // 注册成功(@see 接口文档)
+                if (result.getCode() == 1) {
+                    getView().navigateToHome();
+                    return;
+                }
+                getView().showMessage(result.getMsg());
             }
-            failure("unknown error");
+        }
+
+        @Override
+        public void onFailure(Call<RegisterResult> call, Throwable t) {
+            getView().hideProgress();
+            getView().showMessage(t.getMessage());
         }
     };
 
-    private void failure(final String msg) {
-        handler.post(new Runnable() {
-            @Override public void run() {
-                getView().hideProgress();
-                getView().showMessage(msg);
-            }
-        });
+    @Override public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        if (registerCall != null) {
+            registerCall.cancel();
+        }
     }
-
-    private void success(final String msg) {
-        handler.post(new Runnable() {
-            @Override public void run() {
-                getView().hideProgress();
-                getView().showMessage(msg);
-                getView().navigateToHome();
-            }
-        });
-    }
-
 }
