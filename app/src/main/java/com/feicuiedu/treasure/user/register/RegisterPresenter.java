@@ -19,23 +19,23 @@ import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/12 0012.
- *
+ * <p/>
  * 注册相关业务, 怎么和视图结合 ????
- *
- *
  */
-public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView>{
+public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
     private Call call;
     private Gson gson;
 
-    public RegisterPresenter(){
+    public RegisterPresenter() {
         gson = new Gson();
     }
 
-    /** 本类核心业务*/
+    /**
+     * 本类核心业务
+     */
     public void regiser(User user) {
         OkHttpClient client = NetClient.getInstance().getClient();
 
@@ -56,10 +56,10 @@ public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView>{
         }
 
         @Override public void onResponse(Call call, Response response) throws IOException {
-            if(response.isSuccessful()){
+            if (response.isSuccessful()) {
                 String jsonStr = response.body().string();
                 RegisterResult result = gson.fromJson(jsonStr, RegisterResult.class);
-                if(result.getCode() == 1){
+                if (result.getCode() == 1) {
                     success(result.getMsg());
                     return;
                 }
@@ -70,7 +70,7 @@ public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView>{
         }
     };
 
-    private void failure(final String msg){
+    private void failure(final String msg) {
         handler.post(new Runnable() {
             @Override public void run() {
                 getView().hideProgress();
@@ -79,7 +79,7 @@ public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView>{
         });
     }
 
-    private void success(final String msg){
+    private void success(final String msg) {
         handler.post(new Runnable() {
             @Override public void run() {
                 getView().hideProgress();
