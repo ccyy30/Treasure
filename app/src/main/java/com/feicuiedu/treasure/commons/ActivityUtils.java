@@ -18,9 +18,9 @@ public class ActivityUtils {
     // 弱引用
     private WeakReference<Activity> activityWeakReference;
     private WeakReference<Fragment> fragmentWeakReference;
-
+    //
     private Toast toast;
-
+    //
     public ActivityUtils(Activity activity) {
         activityWeakReference = new WeakReference<>(activity);
     }

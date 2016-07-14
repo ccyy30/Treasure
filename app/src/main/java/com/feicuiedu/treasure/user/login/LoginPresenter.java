@@ -46,7 +46,6 @@ public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
         // 在onPreExecute之后, 后台线程来调用
         @Override protected LoginResult doInBackground(Void... params) {
             OkHttpClient client = NetClient.getInstance().getClient();
-
             String content = gson.toJson(user);
             MediaType type = MediaType.parse("treasure/json");
             // 请求体(##文档，{username:sss , password:ss})
