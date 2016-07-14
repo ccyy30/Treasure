@@ -3,6 +3,7 @@ package com.feicuiedu.treasure.user.register;
 import com.feicuiedu.treasure.net.NetClient;
 import com.feicuiedu.treasure.user.User;
 import com.feicuiedu.treasure.user.UserApi;
+import com.feicuiedu.treasure.user.UserPrefs;
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
 import retrofit2.Call;
@@ -41,6 +42,7 @@ public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> 
                 }
                 // 注册成功(@see 接口文档)
                 if (result.getCode() == 1) {
+                    UserPrefs.getInstance().setTokenid(result.getTokenId());
                     getView().navigateToHome();
                     return;
                 }

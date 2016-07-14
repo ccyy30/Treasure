@@ -3,6 +3,7 @@ package com.feicuiedu.treasure.user.login;
 import com.feicuiedu.treasure.net.NetClient;
 import com.feicuiedu.treasure.user.User;
 import com.feicuiedu.treasure.user.UserApi;
+import com.feicuiedu.treasure.user.UserPrefs;
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
 import retrofit2.Call;
@@ -43,6 +44,8 @@ public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
                 getView().showMessage(result.getMsg());
                 // 登陆成功
                 if (result.getCode() == 1) {
+                    UserPrefs.getInstance().setPhoto(NetClient.BASE_URL + result.getIconUrl());
+                    UserPrefs.getInstance().setTokenid(result.getTokenId());
                     getView().navigateToHome();
                 }
                 return;
