@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.user.account.AccountActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,6 +25,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Bind(R.id.nav_view) NavigationView navigationView;
 
     private ActivityUtils activityUtils;
+
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         );
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        //
+        imageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_userIcon);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                activityUtils.startActivity(AccountActivity.class);
+            }
+        });
     }
 
     @Override public boolean onNavigationItemSelected(MenuItem item) {

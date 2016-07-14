@@ -32,6 +32,8 @@
         </activity>
         <activity android:name=".temp.TempActivity">
         </activity>
+        <activity android:name=".user.account.AccountActivity">
+        </activity>
     </application>
 
 </manifest>
