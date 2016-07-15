@@ -1,5 +1,7 @@
 package com.feicuiedu.treasure.user;
 
+import com.feicuiedu.treasure.user.account.Update;
+import com.feicuiedu.treasure.user.account.UpdateResult;
 import com.feicuiedu.treasure.user.account.UploadResult;
 import com.feicuiedu.treasure.user.login.LoginResult;
 import com.feicuiedu.treasure.user.register.RegisterResult;
@@ -31,6 +33,8 @@ public interface UserApi {
     @POST("/Handler/UserLoadPicHandler1.ashx")
     Call<UploadResult> upload(@Part MultipartBody.Part part);
 
-
+    // 更新头像
+    @POST("/Handler/UserHandler.ashx?action=update")
+    Call<UpdateResult> update(@Body Update update);
 
 }
