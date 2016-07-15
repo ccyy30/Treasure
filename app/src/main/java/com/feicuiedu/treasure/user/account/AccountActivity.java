@@ -1,15 +1,17 @@
 package com.feicuiedu.treasure.user.account;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
 import com.feicuiedu.treasure.components.IconSelectWindow;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.hybridsquad.android.library.CropHandler;
 import org.hybridsquad.android.library.CropHelper;
@@ -24,7 +26,7 @@ import butterknife.OnClick;
 /**
  * 个人用户信息页面
  */
-public class AccountActivity extends AppCompatActivity {
+public class AccountActivity extends MvpActivity<AccoutView,AccountPresenter> implements AccoutView{
 
     @Bind(R.id.toolbar) Toolbar toolbar;
 
@@ -46,6 +48,10 @@ public class AccountActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getTitle());
     }
 
+    @NonNull @Override public AccountPresenter createPresenter() {
+        return new AccountPresenter();
+    }
+
     /**
      * 当在当前个人用户中心页面，按下icon，弹出POPUOWINDOW
      */
@@ -63,13 +69,14 @@ public class AccountActivity extends AppCompatActivity {
         // 剪切完成
         @Override public void onPhotoCropped(Uri uri) {
             File file = new File(uri.getPath());
-            activityUtils.showToast(file.getPath());
+            // 执行头像上传业务
+            getPresenter().uploadPhoto(file);
         }
-
+        // 剪切取消
         @Override public void onCropCancel() {
             activityUtils.showToast("onCropCancel");
         }
-
+        // 剪切失败
         @Override public void onCropFailed(String message) {
             activityUtils.showToast("onCropFailed");
         }
@@ -106,4 +113,20 @@ public class AccountActivity extends AppCompatActivity {
         }
     };
 
+    private ProgressDialog progressDialog;
+    @Override public void showProgress() {
+        progressDialog = ProgressDialog.show(this,"","头像更新中,请稍后...");
+    }
+
+    @Override public void hideProgress() {
+        if(progressDialog != null)progressDialog.dismiss();
+    }
+
+    @Override public void showMessage(String msg) {
+        activityUtils.showToast(msg);
+    }
+
+    @Override public void updatePhoto(String url) {
+
+    }
 }
