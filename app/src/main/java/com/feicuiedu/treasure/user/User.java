@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * 邮箱：yuanchao@feicuiedu.com
  */
 public class User {
-    //    {
+//    {
 //        "UserName":"qjd",
 //            "Password":"654321"
 //    }
