@@ -36,5 +36,4 @@ public interface UserApi {
     // 更新头像
     @POST("/Handler/UserHandler.ashx?action=update")
     Call<UpdateResult> update(@Body Update update);
-
 }

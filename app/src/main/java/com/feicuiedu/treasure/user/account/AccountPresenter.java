@@ -65,7 +65,7 @@ public class AccountPresenter extends MvpNullObjectBasePresenter<AccoutView> {
                 // 上传成功 , 取出结果内的头像地址
                 String photoUrl = result.getUrl(); // 上传后的，头像URL地址
                 UserPrefs.getInstance().setPhoto(NetClient.BASE_URL + photoUrl);
-                getView().updatePhoto(photoUrl);// 视图更新头像
+                getView().updatePhoto(NetClient.BASE_URL + photoUrl);// 视图更新头像
                 // 向服务器更新用户头像，待完成----------------------------------------------------------
                 // 用户头像(在更新用户头像时要用到 @see 接口文档)
                 String photoName = photoUrl.substring(photoUrl.lastIndexOf("/") + 1, photoUrl.length());
