@@ -38,7 +38,6 @@ public class AccountActivity extends MvpActivity<AccoutView, AccountPresenter> i
     private ActivityUtils activityUtils;
     private IconSelectWindow iconSelectWindow; // 按下icon，弹出的POPUOWINDOW
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

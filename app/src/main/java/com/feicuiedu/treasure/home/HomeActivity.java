@@ -20,6 +20,37 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+
+
+
+
+
+
+
+// https://github.com/yuanchaocs/baidumapdemo.git
+
+// 直接使用统一的keystore进行开发
+// 1. 将这个统一的keystore放要项目里(指定使用的是这一个)
+// 2. 将使用这个统一的keystore的sha1值去做申请
+
+// 在使用BaiduMap时
+// 首先会去做验证(keystore和sha1是否是一个)
+
+
+// 1. 申请，配置
+//
+
+
+
+
+
+// 下载SDK
+// 成为开发者
+
+// 创建应用
+//    sha1(百度Demo提供的): 5D:87:28:93:2C:DC:12:D0:7C:E2:C1:EF:14:CE:A3:77:E5:CB:9A:0A
+//    应用包名：你自己的
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Bind(R.id.toolbar) Toolbar toolbar;

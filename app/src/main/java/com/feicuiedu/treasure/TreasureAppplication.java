@@ -2,6 +2,7 @@ package com.feicuiedu.treasure;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.feicuiedu.treasure.user.UserPrefs;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -14,8 +15,12 @@ public class TreasureAppplication extends Application{
 
     @Override public void onCreate() {
         super.onCreate();
+        //
         UserPrefs.init(this);
+        //
         initImageLoader();
+        //
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     private void initImageLoader() {

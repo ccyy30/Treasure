@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    /** 数据签名配置: 使用本模块(app)下的debug.keystore*/
+    signingConfigs{
+        debug{
+            storeFile file("debug.keystore")
+        }
+    }
 }
 
 dependencies {
@@ -36,4 +43,5 @@ dependencies {
     //
     compile 'org.hybridsquad.android.photocropper:library:2.1.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile project(':baidumap')
 }
