@@ -1,4 +1,4 @@
-package com.feicuiedu.treasure.home;
+package com.feicuiedu.treasure.treasure.home;
 
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;

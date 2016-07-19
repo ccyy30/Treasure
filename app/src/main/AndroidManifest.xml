@@ -58,7 +58,7 @@
             android:name=".user.register.RegisterActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".home.HomeActivity">
+        <activity android:name=".treasure.home.HomeActivity">
         </activity>
         <activity android:name=".user.account.AccountActivity">
         </activity>

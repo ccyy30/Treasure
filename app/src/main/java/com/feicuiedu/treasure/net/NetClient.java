@@ -1,5 +1,6 @@
 package com.feicuiedu.treasure.net;
 
+import com.feicuiedu.treasure.treasure.TreasureApi;
 import com.feicuiedu.treasure.user.UserApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -51,6 +52,7 @@ public class NetClient {
     }
 
     private UserApi userApi;
+    private TreasureApi treasureApi;
 
     /**
      * 获取用户模型API对象
@@ -62,6 +64,15 @@ public class NetClient {
             userApi = retrofit.create(UserApi.class);
         }
         return userApi;
+    }
+    /**
+     * 获取宝藏API对象
+     */
+    public TreasureApi getTreasureApi() {
+        if (treasureApi == null) {
+            treasureApi = retrofit.create(TreasureApi.class);
+        }
+        return treasureApi;
     }
 
     public OkHttpClient getClient() {
