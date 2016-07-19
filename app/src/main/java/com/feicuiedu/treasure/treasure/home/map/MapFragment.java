@@ -25,6 +25,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.feicuiedu.treasure.R;
+import com.feicuiedu.treasure.commons.ActivityUtils;
 import com.feicuiedu.treasure.treasure.Area;
 import com.feicuiedu.treasure.treasure.Treasure;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -52,7 +53,10 @@ import butterknife.OnClick;
  */
 public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implements MapMvpView {
 
+    private ActivityUtils activityUtils;
+
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        activityUtils = new ActivityUtils(this);
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
@@ -156,7 +160,6 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         baiduMap.animateMapStatus(update);
     }
 
-
     // 地图缩放操作
     @OnClick({R.id.iv_scaleDown, R.id.iv_scaleUp})
     public void scaleMap(View view) {
@@ -188,11 +191,9 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     // 对地图状态进行监听(缩放?移动等等)
     private final BaiduMap.OnMapStatusChangeListener mapStatusChangeListener = new BaiduMap.OnMapStatusChangeListener() {
         @Override public void onMapStatusChangeStart(MapStatus mapStatus) {
-
         }
 
         @Override public void onMapStatusChange(MapStatus mapStatus) {
-
         }
 
         @Override public void onMapStatusChangeFinish(MapStatus mapStatus) {
@@ -208,7 +209,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         MapStatus mapStatus = baiduMap.getMapStatus();
         double lng = mapStatus.target.longitude;
         double lat = mapStatus.target.latitude;
-        // 计算出你的Area  23.976  15.130
+        // 计算出你的Area  23.999  15.130
         //              24,23  ,  16,15去确定Area
         Area area = new Area();
         area.setMaxLat(Math.ceil(lat));  // lat向上取整
@@ -220,7 +221,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     }
 
     @Override public void showMessage(String msg) {
-
+        activityUtils.showToast(msg);
     }
 
     @Override public void setData(List<Treasure> datas) {
