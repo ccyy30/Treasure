@@ -125,27 +125,30 @@
 
         <!--&lt;!&ndash;宝藏信息提示,默认应该是gone的&ndash;&gt;-->
         <!--&lt;!&ndash;android:visibility="gone"&ndash;&gt;-->
-        <!--<FrameLayout-->
-            <!--android:id="@+id/layout_bottom"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/dp_100"-->
-            <!--android:visibility="gone">-->
-            <!--&lt;!&ndash;用来显示宝藏信息的卡片(选中藏宝时)&ndash;&gt;-->
-            <!--<com.feicuiedu.refactorcoreth.components.TreasureView-->
-                <!--android:id="@+id/treasureView"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_gravity="center"/>-->
+        <FrameLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_100"
+            android:visibility="gone">
 
-            <!--&lt;!&ndash;用来录入宝藏信息的卡片(藏宝时)&ndash;&gt;-->
-            <!--<include-->
-                <!--android:id="@+id/hide_treasure"-->
-                <!--layout="@layout/hide_treasure"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:visibility="gone"/>-->
-        <!--</FrameLayout>-->
+            <!--在选择模式下使用的-->
+            <!--用来显示宝藏信息的卡片(选中藏宝时)-->
+            <com.feicuiedu.treasure.components.TreasureView
+                android:id="@+id/treasureView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
+
+            <!--在埋藏模式下使用的-->
+            <!--用来录入宝藏信息的卡片(藏宝时)-->
+            <include
+                android:id="@+id/hide_treasure"
+                layout="@layout/hide_treasure"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+        </FrameLayout>
     </LinearLayout>
 
 </FrameLayout>

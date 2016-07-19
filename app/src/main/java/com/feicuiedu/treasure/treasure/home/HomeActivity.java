@@ -1,6 +1,7 @@
 package com.feicuiedu.treasure.treasure.home;
 
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.treasure.TreasureRepo;
+import com.feicuiedu.treasure.treasure.home.map.MapFragment;
 import com.feicuiedu.treasure.user.UserPrefs;
 import com.feicuiedu.treasure.user.account.AccountActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,11 +33,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private ImageView imageView;
 
+    private FragmentManager fragmentManager;
+    private MapFragment mapFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityUtils = new ActivityUtils(this);
         setContentView(R.layout.activity_home);
+        fragmentManager = getSupportFragmentManager();
+        mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+        TreasureRepo.getInstance().clear();
     }
 
     @Override protected void onStart() {
@@ -75,7 +84,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_hide: // 埋藏宝藏
-                activityUtils.showToast(R.string.hide_treasure);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                mapFragment.hideTreasure();
                 break;
         }
         // 返回true,当前选项变为checked状态
@@ -83,11 +93,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override public void onBackPressed() {
-        // 是不是打开的(左)
+        // DrawerLayout是开的
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-            return;
         }
-        super.onBackPressed();
+        // DrawerLayout是关的
+        else{
+            if (mapFragment.onBackPressed()) {
+                super.onBackPressed();
+            }
+        }
     }
 }

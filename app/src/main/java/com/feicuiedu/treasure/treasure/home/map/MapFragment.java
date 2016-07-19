@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -26,8 +28,10 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.components.TreasureView;
 import com.feicuiedu.treasure.treasure.Area;
 import com.feicuiedu.treasure.treasure.Treasure;
+import com.feicuiedu.treasure.treasure.TreasureRepo;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import java.util.List;
@@ -228,21 +232,28 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         // 将业务获取到的“附近宝藏”添加为一个个的Marker
         for (Treasure treasure : datas) {
             LatLng position = new LatLng(treasure.getLatitude(), treasure.getLongitude());
-            addMarker(position);
+            addMarker(position, treasure.getId());
         }
     }
 
-    private void addMarker(final LatLng position) {
+    private void addMarker(final LatLng position, final int treasureId) {
         // 测试代码(添加Marker)-------------------------------------------
         // 显示出一个Marker(标记)
         MarkerOptions options = new MarkerOptions();
         options.position(position);// 设置Marker位置
         options.icon(dot);// 设置Marker图标
         options.anchor(0.5f, 0.5f);// 设置Marker的锚点(中)
+        // 将当前宝藏的ID号存到Marker里去()
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", treasureId);
+        options.extraInfo(bundle);
         baiduMap.addOverlay(options); // 添加孚盖物
     }
 
     private Marker currentMarker;
+    // 宝藏信息展示卡片
+    @Bind(R.id.treasureView) TreasureView treasureView;
+
     // 对Marker的监听
     private final BaiduMap.OnMarkerClickListener markerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override public boolean onMarkerClick(Marker marker) {
@@ -252,6 +263,13 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
             InfoWindow infoWindow = new InfoWindow(iconExpanded, marker.getPosition(), 0, infoWindowClickListener);
             // 显示一个信息窗口(icon,位置,Y,监听)
             baiduMap.showInfoWindow(infoWindow);
+            // 从当前Marker中取出这个宝藏的id号(@see addMarker时的操作)
+            int id = marker.getExtraInfo().getInt("id");
+            // 从宝藏仓库中，根据id号取出宝藏
+            Treasure treasure = TreasureRepo.getInstance().getTreasure(id);
+            treasureView.bindTreasure(treasure);
+            // 更新UI模式(进入选择模式)
+            changUiMode(UI_MODE_SELECT);
             return false;
         }
     };
@@ -261,6 +279,79 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         @Override public void onInfoWindowClick() {
             currentMarker.setVisible(true);
             baiduMap.hideInfoWindow();
+            // 回到普通模式
+            changUiMode(UI_MODE_NORMAL);
         }
     };
+
+    public boolean onBackPressed() {
+        if (this.uiMode != UI_MODE_NORMAL) {
+            changUiMode(UI_MODE_NORMAL);
+            return false;
+        }
+        // 当前为普通浏览模式的话，返回true，表明当前fragment不要做其他操作,你可以退出
+        return true;
+    }
+
+    /**
+     * 进入埋藏宝藏模式(在按下藏宝时调用的)
+     */
+    public void hideTreasure() {
+        changUiMode(UI_MODE_HIDE);
+    }
+
+    /**
+     * 宝藏信息提示,默认隐藏的(在屏幕下方位置,包括两种模式下的布局,选中模式时的信息展示卡片,埋藏模式时的信息录入)
+     */
+    @Bind(R.id.layout_bottom) FrameLayout bottomLayout;
+    /**
+     * 埋藏宝藏时需要(中心位置藏宝控件)
+     */
+    @Bind(R.id.centerLayout) RelativeLayout conterLayout;
+    /**
+     * 埋藏宝藏时的信息录入卡片(在屏幕下方位置)
+     */
+    @Bind(R.id.hide_treasure) RelativeLayout hideTreasure;
+    /**
+     * 埋藏宝藏时"藏在这里"的按钮
+     */
+    @Bind(R.id.btn_HideHere) Button btnHideHere;
+
+    private static final int UI_MODE_NORMAL = 0;// 普通
+    private static final int UI_MODE_SELECT = 1;// 选中
+    private static final int UI_MODE_HIDE = 2; // 埋藏
+
+    private int uiMode = UI_MODE_NORMAL;
+
+    private void changUiMode(int uiMode) {
+        if (this.uiMode == uiMode) return;
+        this.uiMode = uiMode;
+        switch (uiMode) {
+            // 进入普通模式(下方布局不可见,藏宝操作布局不可见)
+            case UI_MODE_NORMAL:
+                bottomLayout.setVisibility(View.GONE);// 隐藏下方的宝藏信息layout
+                conterLayout.setVisibility(View.GONE);// 隐藏中间位置藏宝layout
+                break;
+            // 进入选中模式
+            case UI_MODE_SELECT:
+                bottomLayout.setVisibility(View.VISIBLE);// 显示下方的宝藏信息layout
+                treasureView.setVisibility(View.VISIBLE);// 显示宝藏信息卡片
+                conterLayout.setVisibility(View.GONE); // 隐藏中间位置藏宝layout
+                hideTreasure.setVisibility(View.GONE); // 隐藏宝藏录入信息卡片
+                break;
+            // 进入埋藏模式
+            case UI_MODE_HIDE:
+                conterLayout.setVisibility(View.VISIBLE);// 显示中间位置藏宝layout
+                bottomLayout.setVisibility(View.GONE);// 隐藏下方的宝藏信息layout
+                // 按下藏宝时
+                btnHideHere.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        bottomLayout.setVisibility(View.VISIBLE);// 显示下方的宝藏信息layout
+                        hideTreasure.setVisibility(View.VISIBLE);// 显示宝藏录入信息卡片
+                        treasureView.setVisibility(View.GONE);// 隐藏宝藏信息卡片
+                    }
+                });
+                break;
+        }
+    }
 }
