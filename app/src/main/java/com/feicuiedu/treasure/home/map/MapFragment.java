@@ -14,10 +14,15 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMapOptions;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.feicuiedu.treasure.R;
@@ -63,19 +68,20 @@ public class MapFragment extends Fragment {
     private void initBaiduMap() {
         // 状态
         MapStatus mapStatus = new MapStatus.Builder()
-                .zoom(15)
-                .overlook(-20) // (0) - (-30)
+                .zoom(15)//3~21
+                .overlook(0) // (0) - (-45)
                 .build();
         // 设置
         BaiduMapOptions options = new BaiduMapOptions()
                 .mapStatus(mapStatus) // 地图相关状态
+                .overlookingGesturesEnabled(false) // 俯仰关闭
                 .zoomControlsEnabled(false); // 缩放(因为我们自己的UI上有)
         // 地图视图
         mapView = new MapView(getActivity(), options);
-        // 拿到当前MapView的控制器
-        baiduMap = mapView.getMap();
         // 在当前Layout上添加MapView
         mapFrame.addView(mapView, 0);
+        // 拿到当前MapView的控制器
+        baiduMap = mapView.getMap();
     }
 
     // 定位核心API
@@ -101,6 +107,8 @@ public class MapFragment extends Fragment {
         locationClient.requestLocation(); // 请求位置(解决部分机器,初始定位不成功问题)
     }
 
+    private final BitmapDescriptor dot = BitmapDescriptorFactory.fromResource(R.drawable.treasure_dot);
+    private final BitmapDescriptor iconExpanded = BitmapDescriptorFactory.fromResource(R.drawable.treasure_expanded);
     // 定位监听
     private final BDLocationListener locationListener = new BDLocationListener() {
         @Override public void onReceiveLocation(BDLocation bdLocation) {
@@ -109,18 +117,50 @@ public class MapFragment extends Fragment {
                 locationClient.requestLocation();
                 return;
             }
-            double lon = bdLocation.getLongitude();// 经度
+            double lng = bdLocation.getLongitude();// 经度
             double lat = bdLocation.getLatitude();// 纬度
-            myLocation = new LatLng(lat, lon);
+            myLocation = new LatLng(lat, lng);
             MyLocationData myLocationData = new MyLocationData.Builder()
-                    .longitude(lon)
+                    .longitude(lng)
                     .latitude(lat)
-                    .accuracy(100f) // 精度
+                    .accuracy(100f) // 精度（圈大小）
                     .build();
             // 设置定位图层“我的位置”
             baiduMap.setMyLocationData(myLocationData);
             // 移动到我的位置上去
             animateMoveToMyLocation();
+            // 测试代码(添加Marker)-------------------------------------------
+            // 显示出一个Marker(标记)
+            MarkerOptions options = new MarkerOptions();
+            LatLng markerLatlng = new LatLng(lat+0.1f, lng+0.1f);
+            options.position(markerLatlng);// 设置Marker位置
+            options.icon(dot);// 设置Marker图标
+            options.anchor(0.5f,0.5f);// 设置Marker的锚点(中)
+            baiduMap.addOverlay(options); // 添加孚盖物
+            // 测试代码(监听Marker)-------------------------------------------
+            baiduMap.setOnMarkerClickListener(markerClickListener);
+        }
+    };
+
+    private Marker currentMarker;
+    // 对Marker的监听
+    private final BaiduMap.OnMarkerClickListener markerClickListener = new BaiduMap.OnMarkerClickListener() {
+        @Override public boolean onMarkerClick(Marker marker) {
+            currentMarker = marker;
+            // 设置Marker不可见
+            currentMarker.setVisible(false);
+            InfoWindow infoWindow = new InfoWindow(iconExpanded,marker.getPosition(),0,infoWindowClickListener);
+            // 显示一个信息窗口(icon,位置,Y,监听)
+            baiduMap.showInfoWindow(infoWindow);
+            return false;
+        }
+    };
+
+    // 对InfoWindow的监听
+    private final InfoWindow.OnInfoWindowClickListener infoWindowClickListener = new InfoWindow.OnInfoWindowClickListener() {
+        @Override public void onInfoWindowClick() {
+            currentMarker.setVisible(true);
+            baiduMap.hideInfoWindow();
         }
     };
 
