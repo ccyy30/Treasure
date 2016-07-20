@@ -1,5 +1,6 @@
 package com.feicuiedu.treasure.treasure.home.hide;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,16 +8,19 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.baidu.mapapi.model.LatLng;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
+import com.feicuiedu.treasure.treasure.TreasureRepo;
+import com.feicuiedu.treasure.user.UserPrefs;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HideTreasureActivity extends MvpActivity<HideTreasureView,HideTreasurePresenter> implements HideTreasureView {
+public class HideTreasureActivity extends MvpActivity<HideTreasureView, HideTreasurePresenter> implements HideTreasureView {
 
     private static final String EXTRA_KEY_TITLE = "key_title";
     private static final String EXTRA_KEY_LOCATION = "key_location";
@@ -37,6 +41,7 @@ public class HideTreasureActivity extends MvpActivity<HideTreasureView,HideTreas
 
     private ActivityUtils activityUtils;
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.et_description) EditText etDdscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +76,48 @@ public class HideTreasureActivity extends MvpActivity<HideTreasureView,HideTreas
                 break;
             // 确定上传
             case R.id.action_send:
+                Intent preIntent = getIntent();
+                LatLng latLng = preIntent.getParcelableExtra(EXTRA_KEY_LAT_LNG);
+                double altitude = preIntent.getDoubleExtra(EXTRA_KEY_ALTITUDE, 0);
+                String location = preIntent.getStringExtra(EXTRA_KEY_LOCATION);
+                String title = preIntent.getStringExtra(EXTRA_KEY_TITLE);
+                int tokenId = UserPrefs.getInstance().getTokenid();
+                String descroption = etDdscription.getText().toString();
                 // 执行业务
-                // Presenter做业务
-
+                HideTreasure hideTreasure = new HideTreasure();
+                hideTreasure.setLatitude(latLng.latitude);
+                hideTreasure.setLongitude(latLng.longitude);
+                hideTreasure.setAltitude(altitude);
+                hideTreasure.setLocation(location);
+                hideTreasure.setTitle(title);
+                hideTreasure.setTokenId(tokenId);
+                hideTreasure.setDescription(descroption);
+                getPresenter().hideTreasure(hideTreasure);
                 break;
         }
         return true;
     }
 
-    @Override public void showProgress() {
+    private ProgressDialog progressDialog;
 
+    @Override public void showProgress() {
+        activityUtils.hideSoftKeyboard();
+        progressDialog = ProgressDialog.show(this, "", "宝藏数据上传中,请稍后...");
     }
 
     @Override public void hideProgress() {
-
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override public void showMessage(String msg) {
-
+        activityUtils.showToast(msg);
     }
 
     @Override public void navigateToHome() {
-
+        finish();
+        // 清理宝藏仓库
+        TreasureRepo.getInstance().clear();
     }
 }

@@ -405,10 +405,6 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
      */
     @OnClick(R.id.hide_treasure)
     public void clickHideTreasure(){
-        // 1. HideTreasureActivity - UI
-        // 2. 视图
-        // 3. 业务 -- hideTreasure()
-        //     根据接口文档去实现
         activityUtils.hideSoftKeyboard();
         String title = etTreasureTitle.getText().toString();
         if(TextUtils.isEmpty(title)){
