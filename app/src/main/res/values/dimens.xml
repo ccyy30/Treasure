@@ -18,6 +18,8 @@
 
     <dimen name="dp_20">20dp</dimen>
 
+    <dimen name="sp_18">18sp</dimen>
+
     <dimen name="dp_16">16dp</dimen>
 
     <dimen name="dp_14">14dp</dimen>

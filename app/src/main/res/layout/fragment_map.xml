@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map_frame"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +17,7 @@
             android:id="@+id/center"
             android:layout_width="0px"
             android:layout_height="0px"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"/>
 
         <ImageView
             android:id="@+id/iv_located"
@@ -26,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/center"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/treasure_located" />
+            android:src="@drawable/treasure_located"/>
 
         <Button
             android:id="@+id/btn_HideHere"
@@ -35,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/iv_located"
             android:layout_centerHorizontal="true"
-            android:text="@string/hide_here" />
+            android:text="@string/hide_here"/>
     </RelativeLayout>
 
     <!--地图控制(定位，卫星，指南)-->
@@ -66,7 +65,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:scaleType="centerInside"
-                    android:src="@drawable/scale_up" />
+                    android:src="@drawable/scale_up"/>
 
                 <ImageView
                     android:id="@+id/iv_scaleDown"
@@ -75,7 +74,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:scaleType="centerInside"
-                    android:src="@drawable/scale_down" />
+                    android:src="@drawable/scale_down"/>
             </LinearLayout>
             <!--定位，卫星，指南-->
             <LinearLayout
@@ -96,7 +95,7 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/dp_20"
                     android:paddingRight="@dimen/dp_20"
-                    android:text="@string/located" />
+                    android:text="@string/located"/>
 
                 <TextView
                     android:id="@+id/tv_satellite"
@@ -107,7 +106,7 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/dp_20"
                     android:paddingRight="@dimen/dp_20"
-                    android:text="@string/satellite" />
+                    android:text="@string/satellite"/>
 
                 <TextView
                     android:id="@+id/tv_compass"
@@ -118,20 +117,17 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/dp_20"
                     android:paddingRight="@dimen/dp_20"
-                    android:text="@string/compass" />
+                    android:text="@string/compass"/>
             </LinearLayout>
 
         </RelativeLayout>
-
-        <!--&lt;!&ndash;宝藏信息提示,默认应该是gone的&ndash;&gt;-->
-        <!--&lt;!&ndash;android:visibility="gone"&ndash;&gt;-->
+        <!--用来显示宝藏信息的fragment-->
+        <!--android:visibility="gone"-->
         <FrameLayout
             android:id="@+id/layout_bottom"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_100"
             android:visibility="gone">
-
-            <!--在选择模式下使用的-->
             <!--用来显示宝藏信息的卡片(选中藏宝时)-->
             <com.feicuiedu.treasure.components.TreasureView
                 android:id="@+id/treasureView"
@@ -139,7 +135,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"/>
 
-            <!--在埋藏模式下使用的-->
             <!--用来录入宝藏信息的卡片(藏宝时)-->
             <include
                 android:id="@+id/hide_treasure"

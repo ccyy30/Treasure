@@ -17,27 +17,29 @@ import retrofit2.Response;
  * 作者：yuanchao on 2016/7/19 0019 10:23
  * 邮箱：yuanchao@feicuiedu.com
  */
-public class MapPresenter extends MvpNullObjectBasePresenter<MapMvpView>{
+public class MapPresenter extends MvpNullObjectBasePresenter<MapMvpView> {
 
     private Call<List<Treasure>> call;
     private Area area;
 
-    /** 核心业务,获取宝藏,指定区域*/
+    /**
+     * 核心业务,获取宝藏,指定区域
+     */
     public void getTreasure(Area area) {
         // 当前这个区域是否已获取过
-        if(TreasureRepo.getInstance().isCached(area)){
+        if (TreasureRepo.getInstance().isCached(area)) {
             return;
         }
         this.area = area;
         TreasureApi treasureApi = NetClient.getInstance().getTreasureApi();
-        if(call !=null)call.cancel();
+        if (call != null) call.cancel();
         call = treasureApi.getTreasureInArea(area);
         call.enqueue(callback);
     }
 
     private final Callback<List<Treasure>> callback = new Callback<List<Treasure>>() {
         @Override public void onResponse(Call<List<Treasure>> call, Response<List<Treasure>> response) {
-            if(response != null && response.isSuccessful()){
+            if (response != null && response.isSuccessful()) {
                 List<Treasure> datas = response.body();
                 if (datas == null) {
                     getView().showMessage("unknown error");
@@ -52,13 +54,14 @@ public class MapPresenter extends MvpNullObjectBasePresenter<MapMvpView>{
         }
 
         @Override public void onFailure(Call<List<Treasure>> call, Throwable t) {
-            getView().showMessage(t.getMessage());
+            getView().showMessage("Failure: " + t.getMessage());
+            t.printStackTrace();
         }
     };
 
     @Override public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
-        if(call != null){
+        if (call != null) {
             call.cancel();
         }
     }

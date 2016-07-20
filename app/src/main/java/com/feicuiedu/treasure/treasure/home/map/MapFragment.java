@@ -2,10 +2,12 @@ package com.feicuiedu.treasure.treasure.home.map;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -42,6 +44,7 @@ import com.feicuiedu.treasure.components.TreasureView;
 import com.feicuiedu.treasure.treasure.Area;
 import com.feicuiedu.treasure.treasure.Treasure;
 import com.feicuiedu.treasure.treasure.TreasureRepo;
+import com.feicuiedu.treasure.treasure.home.hide.HideTreasureActivity;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import java.util.List;
@@ -165,7 +168,6 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     private final OnGetGeoCoderResultListener getGeoCoderResultListener = new OnGetGeoCoderResultListener() {
         // 地理编码 (地址 -> 经纬度)
         @Override public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
-
         }
 
         // 反地理编码 (经纬度 -> 地址)
@@ -340,6 +342,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     private Marker currentMarker;
     // 宝藏信息展示卡片
     @Bind(R.id.treasureView) TreasureView treasureView;
+    @Bind(R.id.et_treasureTitle) EditText etTreasureTitle;// 信息录入编辑框(埋藏宝藏时)
 
     // 对Marker的监听
     private final BaiduMap.OnMarkerClickListener markerClickListener = new BaiduMap.OnMarkerClickListener() {
@@ -385,7 +388,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     /**
      * 进入埋藏宝藏模式(在按下藏宝时调用的)
      */
-    public void clickHideTreasure() {
+    public void switchToHideTreasure() {
         changUiMode(UI_MODE_HIDE);
     }
 
@@ -397,7 +400,25 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         activityUtils.hideSoftKeyboard();
         activityUtils.showToast("gogogo");
     }
-
+    /**
+     * 按下宝藏信息录入卡片将进入埋藏宝藏页面
+     */
+    @OnClick(R.id.hide_treasure)
+    public void clickHideTreasure(){
+        // 1. HideTreasureActivity - UI
+        // 2. 视图
+        // 3. 业务 -- hideTreasure()
+        //     根据接口文档去实现
+        activityUtils.hideSoftKeyboard();
+        String title = etTreasureTitle.getText().toString();
+        if(TextUtils.isEmpty(title)){
+            activityUtils.showToast(R.string.please_input_title);
+            return;
+        }
+        // 进入埋藏宝藏页面
+        LatLng latLng = baiduMap.getMapStatus().target;
+        HideTreasureActivity.open(getContext(),title,address,latLng,0);
+    }
     /**
      * 宝藏信息提示,默认隐藏的(在屏幕下方位置,包括两种模式下的布局,选中模式时的信息展示卡片,埋藏模式时的信息录入)
      */
@@ -428,8 +449,8 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         switch (uiMode) {
             // 进入普通模式(下方布局不可见,藏宝操作布局不可见)
             case UI_MODE_NORMAL:
+                if (currentMarker != null) currentMarker.setVisible(true);
                 baiduMap.hideInfoWindow();
-                currentMarker.setVisible(true);
                 bottomLayout.setVisibility(View.GONE);// 隐藏下方的宝藏信息layout
                 conterLayout.setVisibility(View.GONE);// 隐藏中间位置藏宝layout
                 break;

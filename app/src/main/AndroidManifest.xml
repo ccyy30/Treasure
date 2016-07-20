@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.feicuiedu.treasure"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest package="com.feicuiedu.treasure"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
@@ -61,6 +60,8 @@
         <activity android:name=".treasure.home.HomeActivity">
         </activity>
         <activity android:name=".user.account.AccountActivity">
+        </activity>
+        <activity android:name=".treasure.home.hide.HideTreasureActivity">
         </activity>
     </application>
 

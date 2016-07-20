@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--抽屉-->
+<!--DrawerLayout 抽屉-->
 <android.support.v4.widget.DrawerLayout
     android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start">
-
-    <!--内容-->
+    tools:context=".treasure.home.map.HomeActivity">
+    <!-- 内容-->
     <include
         android:id="@+id/home"
         layout="@layout/content_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <!--侧滑视图-->
-    <!--headerLayout: 设置菜单的头布局 (其实是RecyclerView position=0 处的视图)-->
-    <!--itemTextColor: 设置菜单选项的文本颜色 (注意此选择器必须放在单独的color文件夹中)-->
+    <!-- 视图(Drawer) NavigationView-->
+    <!--app:headerLayout-->
+    <!--app:menu-->
+    <!--android:layout_gravity: start(左侧抽屉) or end(右侧抽屉)-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:layout_marginTop="?attr/actionBarSize"
+        android:layout_gravity="start"
         android:background="@color/colorDrawerBackground"
-        android:fitsSystemWindows="true"
         app:headerLayout="@layout/layout_nav_header"
-        app:itemTextColor="@color/selector_nav_icon_colors"
-        app:menu="@menu/menu_drawer"/>
+        app:menu="@menu/menu_drawer"
+        app:itemTextColor="@color/selector_nav_icon_colors"/>
 </android.support.v4.widget.DrawerLayout>
+
+
+
+

@@ -57,6 +57,14 @@
     <string name="fake_password">********</string>
     <string name="zero">0</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="treasure_details">宝物详情</string>
+    <string name="treasure_type">宝物类型</string>
+    <string name="level_easy">容易</string>
+    <string name="type_traditional">传统</string>
+
+    <string name="size_small">小</string>
+    <string name="size_normal">中</string>
+    <string name="size_big">大</string>
+    <string name="find_treasure">找到宝藏</string>
+
 </resources>
