@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -27,6 +28,12 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.feicuiedu.treasure.R;
@@ -78,13 +85,13 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         initBaiduMap();
         // 初始定位相关
         initLocation();
+        // 地理编码相关
+        initGeoCoder();
     }
 
     @Bind(R.id.map_frame) FrameLayout mapFrame;
     private MapView mapView; // 地图视图
     private BaiduMap baiduMap; // 地图视图操作类
-
-
 
     private void initBaiduMap() {
         // 状态
@@ -109,7 +116,6 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         mapFrame.addView(mapView, 0);
         // 拿到当前MapView的控制器
         baiduMap = mapView.getMap();
-
         // 对Marker的监听
         baiduMap.setOnMarkerClickListener(markerClickListener);
         // 对地图状态进行监听 (将开始进行区域内宝藏数据的获取)
@@ -141,10 +147,43 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         locationClient.requestLocation(); // 请求位置(解决部分机器,初始定位不成功问题)
     }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        // 取消之前注册的定位监听函数
-        locationClient.unRegisterLocationListener(locationListener);
+    private GeoCoder geoCoder;
+    /**
+     * 在埋藏宝藏时，下方卡片上显示的埋藏位置
+     */
+    @Bind(R.id.tv_currentLocation) TextView tvCurrentLication;
+    private String address;
+
+    // 地理编码
+    private void initGeoCoder() {
+        geoCoder = GeoCoder.newInstance();
+        // 监听地理编码
+        geoCoder.setOnGetGeoCodeResultListener(getGeoCoderResultListener);
+    }
+
+    // 地理编码监听
+    private final OnGetGeoCoderResultListener getGeoCoderResultListener = new OnGetGeoCoderResultListener() {
+        // 地理编码 (地址 -> 经纬度)
+        @Override public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+        }
+
+        // 反地理编码 (经纬度 -> 地址)
+        @Override public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+            if (reverseGeoCodeResult == null) return;
+            if (reverseGeoCodeResult.error == SearchResult.ERRORNO.NO_ERROR) {
+                address = "未知";
+            }
+            address = reverseGeoCodeResult.getAddress();
+            tvCurrentLication.setText(address);
+        }
+    };
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        if (locationListener != null)
+            // 取消之前注册的定位监听函数
+            locationClient.unRegisterLocationListener(locationListener);
     }
 
     public static LatLng getMyLocation() {
@@ -219,6 +258,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         baiduMap.getUiSettings().setCompassEnabled(!isCompass);
     }
 
+    private LatLng target;
     // 对地图状态进行监听(缩放?移动等等)
     private final BaiduMap.OnMapStatusChangeListener mapStatusChangeListener = new BaiduMap.OnMapStatusChangeListener() {
         @Override public void onMapStatusChangeStart(MapStatus mapStatus) {
@@ -227,14 +267,27 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         @Override public void onMapStatusChange(MapStatus mapStatus) {
         }
 
+        // 只要地图状态(缩放?移动都是)更新结束,就会来调用
         @Override public void onMapStatusChangeFinish(MapStatus mapStatus) {
-            updateMapArea();
-            if(uiMode == UI_MODE_HIDE) {
-                // 反弹动画
-                YoYo.with(Techniques.Bounce).duration(1000).playOn(btnHideHere);
-                YoYo.with(Techniques.Bounce).duration(1000).playOn(ivLocated);
-                // 淡入动画
-                YoYo.with(Techniques.FadeIn).duration(1000).playOn(btnHideHere);
+            LatLng target = mapStatus.target;
+            // 的确是位置变化了!
+            if (target != MapFragment.this.target) {
+                // 更新宝藏数据
+                updateMapArea();
+                // 在埋藏宝藏模式下
+                if (uiMode == UI_MODE_HIDE) {
+                    // 反地理编码
+                    ReverseGeoCodeOption option = new ReverseGeoCodeOption();
+                    option.location(target);
+                    geoCoder.reverseGeoCode(option);
+                    // 反弹动画
+                    YoYo.with(Techniques.Bounce).duration(1000).playOn(btnHideHere);
+                    YoYo.with(Techniques.Bounce).duration(1000).playOn(ivLocated);
+                    // 淡入动画
+                    YoYo.with(Techniques.FadeIn).duration(1000).playOn(btnHideHere);
+                }
+                // 更新当前位置,防止重复的触发
+                MapFragment.this.target = target;
             }
         }
     };

@@ -1,7 +1,5 @@
 package com.feicuiedu.treasure.treasure;
 
-import com.feicuiedu.treasure.treasure.Treasure;
-
 import java.util.List;
 
 import retrofit2.Call;
