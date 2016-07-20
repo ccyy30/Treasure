@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.menu_item_hide: // 埋藏宝藏
                 drawerLayout.closeDrawer(GravityCompat.START);
-                mapFragment.hideTreasure();
+                mapFragment.clickHideTreasure();
                 break;
         }
         // 返回true,当前选项变为checked状态
@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         // DrawerLayout是关的
         else{
-            if (mapFragment.onBackPressed()) {
+            if (mapFragment.clickBackPressed()) {
                 super.onBackPressed();
             }
         }

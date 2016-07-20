@@ -101,14 +101,14 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
 
         // 对Marker的监听
         baiduMap.setOnMarkerClickListener(markerClickListener);
-        // 对地图状态进行监听
+        // 对地图状态进行监听 (将开始进行区域内宝藏数据的获取)
         baiduMap.setOnMapStatusChangeListener(mapStatusChangeListener);
     }
 
     // 定位核心API
     private LocationClient locationClient;
     // 我的位置(通过定位得到的当前位置经纬度)
-    private LatLng myLocation;
+    private static LatLng myLocation;
 
     private void initLocation() {
         // 激活定位图层
@@ -128,8 +128,13 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         locationClient.requestLocation(); // 请求位置(解决部分机器,初始定位不成功问题)
     }
 
+    public static LatLng getMyLocation() {
+        return myLocation;
+    }
+
     private final BitmapDescriptor dot = BitmapDescriptorFactory.fromResource(R.drawable.treasure_dot);
     private final BitmapDescriptor iconExpanded = BitmapDescriptorFactory.fromResource(R.drawable.treasure_expanded);
+    private boolean isFirstLocated = true; // 是否首次定位判断
     // 定位监听
     private final BDLocationListener locationListener = new BDLocationListener() {
         @Override public void onReceiveLocation(BDLocation bdLocation) {
@@ -148,8 +153,11 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
                     .build();
             // 设置定位图层“我的位置”
             baiduMap.setMyLocationData(myLocationData);
-            // 移动到我的位置上去
-            animateMoveToMyLocation();
+            // 移动到我的位置上去(只有首次定位时,以后通过click定位再移上去)
+            if (isFirstLocated) {
+                animateMoveToMyLocation();
+                isFirstLocated = false;
+            }
         }
     };
 
@@ -257,6 +265,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     // 对Marker的监听
     private final BaiduMap.OnMarkerClickListener markerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override public boolean onMarkerClick(Marker marker) {
+            if (currentMarker != null) currentMarker.setVisible(true);
             currentMarker = marker;
             // 设置Marker不可见
             currentMarker.setVisible(false);
@@ -277,14 +286,15 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     // 对InfoWindow的监听
     private final InfoWindow.OnInfoWindowClickListener infoWindowClickListener = new InfoWindow.OnInfoWindowClickListener() {
         @Override public void onInfoWindowClick() {
-            currentMarker.setVisible(true);
-            baiduMap.hideInfoWindow();
             // 回到普通模式
             changUiMode(UI_MODE_NORMAL);
         }
     };
 
-    public boolean onBackPressed() {
+    /**
+     * 按下back时来调用
+     */
+    public boolean clickBackPressed() {
         if (this.uiMode != UI_MODE_NORMAL) {
             changUiMode(UI_MODE_NORMAL);
             return false;
@@ -296,8 +306,17 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     /**
      * 进入埋藏宝藏模式(在按下藏宝时调用的)
      */
-    public void hideTreasure() {
+    public void clickHideTreasure() {
         changUiMode(UI_MODE_HIDE);
+    }
+
+    /**
+     * 按下宝藏信息展示卡片将进入宝藏详情页
+     */
+    @OnClick(R.id.treasureView)
+    public void clickTreasureView() {
+        activityUtils.hideSoftKeyboard();
+        activityUtils.showToast("gogogo");
     }
 
     /**
@@ -329,6 +348,8 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         switch (uiMode) {
             // 进入普通模式(下方布局不可见,藏宝操作布局不可见)
             case UI_MODE_NORMAL:
+                baiduMap.hideInfoWindow();
+                currentMarker.setVisible(true);
                 bottomLayout.setVisibility(View.GONE);// 隐藏下方的宝藏信息layout
                 conterLayout.setVisibility(View.GONE);// 隐藏中间位置藏宝layout
                 break;

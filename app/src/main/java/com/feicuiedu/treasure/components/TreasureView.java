@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.treasure.Treasure;
 
+import java.text.DecimalFormat;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -51,7 +53,10 @@ public class TreasureView extends RelativeLayout{
     public void bindTreasure(@NonNull Treasure treasure){
         tvTitle.setText(treasure.getTitle());
         tvLocation.setText(treasure.getLocation());
-        double distance = 0.00D;
-        tv_Distance.setText("0.00KM");
+        // 计算距离
+        double distance = treasure.distanceToMyLocation();
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        String text = decimalFormat.format(distance/1000) + "km";
+        tv_Distance.setText(text);
     }
 }
