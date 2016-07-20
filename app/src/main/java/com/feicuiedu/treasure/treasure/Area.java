@@ -20,7 +20,7 @@ public class Area {
     private int currentPage = 1;
 
     @SerializedName("PagerSize")
-    private int pagerSize = 20;
+    private int pagerSize = 50;
 
     @SerializedName("XlineMin")
     private double minLng;

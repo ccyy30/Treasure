@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.baidu.location.BDLocation;
@@ -26,6 +27,8 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
 import com.feicuiedu.treasure.components.TreasureView;
@@ -81,6 +84,8 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     private MapView mapView; // 地图视图
     private BaiduMap baiduMap; // 地图视图操作类
 
+
+
     private void initBaiduMap() {
         // 状态
         MapStatus mapStatus = new MapStatus.Builder()
@@ -90,8 +95,14 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         // 设置
         BaiduMapOptions options = new BaiduMapOptions()
                 .mapStatus(mapStatus) // 地图相关状态
-                .overlookingGesturesEnabled(false) // 俯仰关闭
-                .zoomControlsEnabled(false); // 缩放(因为我们自己的UI上有)
+                .compassEnabled(true) // 指南针
+                .zoomGesturesEnabled(true) // 设置是否允许缩放手势
+                .rotateGesturesEnabled(true) // 设置是否允许旋转手势，默认允许
+                .scrollGesturesEnabled(true) // 设置是否允许拖拽手势，默认允许
+                .scaleControlEnabled(false) // 设置是否显示比例尺控件
+                .overlookingGesturesEnabled(false) // 设置是否允许俯视手势，默认允许
+                .zoomControlsEnabled(false) // 设置是否显示缩放控件
+                ;
         // 地图视图
         mapView = new MapView(getActivity(), options);
         // 在当前Layout上添加MapView
@@ -105,7 +116,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         baiduMap.setOnMapStatusChangeListener(mapStatusChangeListener);
     }
 
-    // 定位核心API
+    // 定位服务的客户端。只支持在主线程中启动
     private LocationClient locationClient;
     // 我的位置(通过定位得到的当前位置经纬度)
     private static LatLng myLocation;
@@ -118,14 +129,22 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         // 进行一些定位的一般常规性设置
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开GPS
-        option.setScanSpan(60000);// 扫描周期
+        option.setScanSpan(60000);// 扫描周期,设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setCoorType("bd09ll");// 百度坐标类型
+        option.setLocationNotify(true);//设置是否当gps有效时按照1S1次频率输出GPS结果
+        option.SetIgnoreCacheException(false);//设置是否收集CRASH信息，默认收集
         locationClient.setLocOption(option);
         // 注册定位监听
         locationClient.registerLocationListener(locationListener);
         // 开始定位
         locationClient.start();
         locationClient.requestLocation(); // 请求位置(解决部分机器,初始定位不成功问题)
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        // 取消之前注册的定位监听函数
+        locationClient.unRegisterLocationListener(locationListener);
     }
 
     public static LatLng getMyLocation() {
@@ -210,6 +229,13 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
 
         @Override public void onMapStatusChangeFinish(MapStatus mapStatus) {
             updateMapArea();
+            if(uiMode == UI_MODE_HIDE) {
+                // 反弹动画
+                YoYo.with(Techniques.Bounce).duration(1000).playOn(btnHideHere);
+                YoYo.with(Techniques.Bounce).duration(1000).playOn(ivLocated);
+                // 淡入动画
+                YoYo.with(Techniques.FadeIn).duration(1000).playOn(btnHideHere);
+            }
         }
     };
 
@@ -335,6 +361,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
      * 埋藏宝藏时"藏在这里"的按钮
      */
     @Bind(R.id.btn_HideHere) Button btnHideHere;
+    @Bind(R.id.iv_located) ImageView ivLocated;
 
     private static final int UI_MODE_NORMAL = 0;// 普通
     private static final int UI_MODE_SELECT = 1;// 选中
@@ -359,6 +386,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
                 treasureView.setVisibility(View.VISIBLE);// 显示宝藏信息卡片
                 conterLayout.setVisibility(View.GONE); // 隐藏中间位置藏宝layout
                 hideTreasure.setVisibility(View.GONE); // 隐藏宝藏录入信息卡片
+                YoYo.with(Techniques.Bounce).duration(500).playOn(bottomLayout);
                 break;
             // 进入埋藏模式
             case UI_MODE_HIDE:
@@ -370,6 +398,8 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
                         bottomLayout.setVisibility(View.VISIBLE);// 显示下方的宝藏信息layout
                         hideTreasure.setVisibility(View.VISIBLE);// 显示宝藏录入信息卡片
                         treasureView.setVisibility(View.GONE);// 隐藏宝藏信息卡片
+                        // 下方的layout做一个动画
+                        YoYo.with(Techniques.FlipInX).duration(500).playOn(bottomLayout);
                     }
                 });
                 break;
