@@ -144,6 +144,8 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         option.setCoorType("bd09ll");// 百度坐标类型
         option.setLocationNotify(true);//设置是否当gps有效时按照1S1次频率输出GPS结果
         option.SetIgnoreCacheException(false);//设置是否收集CRASH信息，默认收集
+        option.setIsNeedAddress(true);// 设置是否需要地址信息，默认不需要
+        option.setIsNeedLocationDescribe(true);//设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
         locationClient.setLocOption(option);
         // 注册定位监听
         locationClient.registerLocationListener(locationListener);
@@ -192,7 +194,9 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
 
     public static LatLng getMyLocation() {
         return myLocation;
-    }public static String getMyAddress() {
+    }
+
+    public static String getMyAddress() {
         return myAddress;
     }
 
@@ -209,7 +213,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
             }
             double lng = bdLocation.getLongitude();// 经度
             double lat = bdLocation.getLatitude();// 纬度
-            myAddress = bdLocation.getAddress().address;
+            myAddress = bdLocation.getAddrStr();
             myLocation = new LatLng(lat, lng);
             MyLocationData myLocationData = new MyLocationData.Builder()
                     .longitude(lng)
@@ -410,21 +414,23 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         Treasure treasure = TreasureRepo.getInstance().getTreasure(treasureId);
         TreasureDetailActivity.open(getContext(), treasure);
     }
+
     /**
      * 按下宝藏信息录入卡片将进入埋藏宝藏页面
      */
     @OnClick(R.id.hide_treasure)
-    public void clickHideTreasure(){
+    public void clickHideTreasure() {
         activityUtils.hideSoftKeyboard();
         String title = etTreasureTitle.getText().toString();
-        if(TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             activityUtils.showToast(R.string.please_input_title);
             return;
         }
         // 进入埋藏宝藏页面
         LatLng latLng = baiduMap.getMapStatus().target;
-        HideTreasureActivity.open(getContext(),title,address,latLng,0);
+        HideTreasureActivity.open(getContext(), title, address, latLng, 0);
     }
+
     /**
      * 宝藏信息提示,默认隐藏的(在屏幕下方位置,包括两种模式下的布局,选中模式时的信息展示卡片,埋藏模式时的信息录入)
      */

@@ -115,10 +115,10 @@ public class TreasureDetailActivity extends MvpActivity<TreasureDetailView, Trea
     private final PopupMenu.OnMenuItemClickListener menuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
         @Override public boolean onMenuItemClick(MenuItem item) {
             LatLng startPt = MapFragment.getMyLocation();
-            String startAdr = "AAA";
+            String startAdr = MapFragment.getMyAddress();
             LogUtils.d("startAdr:" + startAdr);
             LatLng endPt = new LatLng(treasure.getLatitude(), treasure.getLongitude());
-            String endAdr = "bbb";
+            String endAdr = treasure.getLocation();
             LogUtils.d("endAdr:" + endAdr);
             switch (item.getItemId()) {
                 case R.id.walking_navi:
