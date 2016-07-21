@@ -66,5 +66,6 @@
     <string name="size_normal">中</string>
     <string name="size_big">大</string>
     <string name="find_treasure">找到宝藏</string>
+    <string name="navigation">开始导航</string>
 
 </resources>

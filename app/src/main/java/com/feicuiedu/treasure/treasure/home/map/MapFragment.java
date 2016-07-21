@@ -366,6 +366,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
         }
     };
 
+
     // 对InfoWindow的监听
     private final InfoWindow.OnInfoWindowClickListener infoWindowClickListener = new InfoWindow.OnInfoWindowClickListener() {
         @Override public void onInfoWindowClick() {

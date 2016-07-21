@@ -1,5 +1,7 @@
 package com.feicuiedu.treasure.treasure;
 
+import com.feicuiedu.treasure.treasure.home.detail.TreasureDetail;
+import com.feicuiedu.treasure.treasure.home.detail.TreasureDetailResult;
 import com.feicuiedu.treasure.treasure.home.hide.HideTreasure;
 import com.feicuiedu.treasure.treasure.home.hide.HideTreasureResult;
 
@@ -20,4 +22,7 @@ public interface TreasureApi {
 
     @POST("/Handler/TreasureHandler.ashx?action=hide")
     Call<HideTreasureResult> hideTreasure(@Body HideTreasure body);
+
+    @POST("/Handler/TreasureHandler.ashx?action=tdetails")
+    Call<List<TreasureDetailResult>> getTreasureDetail(@Body TreasureDetail body);
 }
