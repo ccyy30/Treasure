@@ -130,6 +130,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     private LocationClient locationClient;
     // 我的位置(通过定位得到的当前位置经纬度)
     private static LatLng myLocation;
+    private static String myAddress;
 
     private void initLocation() {
         // 激活定位图层
@@ -191,6 +192,8 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
 
     public static LatLng getMyLocation() {
         return myLocation;
+    }public static String getMyAddress() {
+        return myAddress;
     }
 
     private final BitmapDescriptor dot = BitmapDescriptorFactory.fromResource(R.drawable.treasure_dot);
@@ -206,6 +209,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
             }
             double lng = bdLocation.getLongitude();// 经度
             double lat = bdLocation.getLatitude();// 纬度
+            myAddress = bdLocation.getAddress().address;
             myLocation = new LatLng(lat, lng);
             MyLocationData myLocationData = new MyLocationData.Builder()
                     .longitude(lng)
