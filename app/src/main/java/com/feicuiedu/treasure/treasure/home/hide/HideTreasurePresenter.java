@@ -12,7 +12,7 @@ import retrofit2.Response;
  * 作者：yuanchao on 2016/7/20 0020 17:19
  * 邮箱：yuanchao@feicuiedu.com
  */
-public class HideTreasurePresenter extends MvpNullObjectBasePresenter<HideTreasureView>{
+public class HideTreasurePresenter extends MvpNullObjectBasePresenter<HideTreasureView> {
 
     private Call<HideTreasureResult> hideCall;
 
@@ -22,24 +22,25 @@ public class HideTreasurePresenter extends MvpNullObjectBasePresenter<HideTreasu
     public void hideTreasure(HideTreasure hideTreasure) {
         getView().showProgress();
         TreasureApi treasureApi = NetClient.getInstance().getTreasureApi();
-        if(hideCall != null)hideCall.cancel();
+        if (hideCall != null) hideCall.cancel();
         hideCall = treasureApi.hideTreasure(hideTreasure);
         hideCall.enqueue(callBack);
     }
 
     private final Callback<HideTreasureResult> callBack = new Callback<HideTreasureResult>() {
+
         @Override public void onResponse(Call<HideTreasureResult> call, Response<HideTreasureResult> response) {
             getView().hideProgress();
-            if(response != null && response.isSuccessful()){
+            if (response != null && response.isSuccessful()) {
                 // 得到响应结束
                 HideTreasureResult result = response.body();
                 if (result == null) {
                     getView().showMessage("unknown erro");
-                    return ;
+                    return;
                 }
                 getView().showMessage(result.getMsg());
                 // 成功
-                if(result.code == 1){
+                if (result.code == 1) {
                     getView().navigateToHome();
                 }
             }

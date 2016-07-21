@@ -29,6 +29,9 @@ public class HideTreasureActivity extends MvpActivity<HideTreasureView, HideTrea
 
     /**
      * 进入当前Activity
+     * Mvp
+     * OkHttp
+     * Retrofit
      */
     public static void open(Context context, String title, String location, LatLng latLng, double altitude) {
         Intent intent = new Intent(context, HideTreasureActivity.class);

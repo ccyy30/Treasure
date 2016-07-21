@@ -5,13 +5,15 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.feicuiedu.treasure.treasure.home.map.MapFragment;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
 
  * 获取宝藏时的响应体数据 ResponeBody
  * 作者：yuanchao on 2016/7/19 0019 10:40
  * 邮箱：yuanchao@feicuiedu.com
  */
-public class Treasure {
+public class Treasure implements Serializable{
 //    "htid": 173,                   //宝藏id
 //            "htpoi": "北京市大兴区福东街", //位置
 //            "htsize": 0,                   //宝物大小

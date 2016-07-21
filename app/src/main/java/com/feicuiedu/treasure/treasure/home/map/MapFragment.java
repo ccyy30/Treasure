@@ -44,6 +44,7 @@ import com.feicuiedu.treasure.components.TreasureView;
 import com.feicuiedu.treasure.treasure.Area;
 import com.feicuiedu.treasure.treasure.Treasure;
 import com.feicuiedu.treasure.treasure.TreasureRepo;
+import com.feicuiedu.treasure.treasure.home.detail.TreasureDetailActivity;
 import com.feicuiedu.treasure.treasure.home.hide.HideTreasureActivity;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -398,7 +399,11 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     @OnClick(R.id.treasureView)
     public void clickTreasureView() {
         activityUtils.hideSoftKeyboard();
-        activityUtils.showToast("gogogo");
+        // 当前已选择的marker - treasureId
+        // 宝藏仓库中,根据treasureId,取得这个宝藏对象
+        int treasureId = currentMarker.getExtraInfo().getInt("id");
+        Treasure treasure = TreasureRepo.getInstance().getTreasure(treasureId);
+        TreasureDetailActivity.open(getContext(), treasure);
     }
     /**
      * 按下宝藏信息录入卡片将进入埋藏宝藏页面

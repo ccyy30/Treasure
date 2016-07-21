@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 宝藏仓库,用来强引用宝藏及区域数据
- *
+ * <p/>
  * 作者：yuanchao on 2016/7/19 0019 14:10
  * 邮箱：yuanchao@feicuiedu.com
  */
