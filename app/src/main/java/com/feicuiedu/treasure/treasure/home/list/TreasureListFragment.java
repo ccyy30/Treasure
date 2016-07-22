@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.treasure.TreasureRepo;
 
 /**
@@ -36,6 +37,7 @@ public class TreasureListFragment extends Fragment{
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         recyclerView = new RecyclerView(container.getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        recyclerView.setBackgroundResource(R.drawable.screen_bg);
         return recyclerView;
     }
 
