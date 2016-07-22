@@ -27,7 +27,6 @@ import com.baidu.mapapi.navi.NaviParaOption;
 import com.baidu.mapapi.utils.OpenClientUtil;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.commons.ActivityUtils;
-import com.feicuiedu.treasure.commons.LogUtils;
 import com.feicuiedu.treasure.components.TreasureView;
 import com.feicuiedu.treasure.treasure.Treasure;
 import com.feicuiedu.treasure.treasure.home.map.MapFragment;
@@ -116,10 +115,8 @@ public class TreasureDetailActivity extends MvpActivity<TreasureDetailView, Trea
         @Override public boolean onMenuItemClick(MenuItem item) {
             LatLng startPt = MapFragment.getMyLocation();
             String startAdr = MapFragment.getMyAddress();
-            LogUtils.d("startAdr:" + startAdr);
             LatLng endPt = new LatLng(treasure.getLatitude(), treasure.getLongitude());
             String endAdr = treasure.getLocation();
-            LogUtils.d("endAdr:" + endAdr);
             switch (item.getItemId()) {
                 case R.id.walking_navi:
                     startWalkingNavi(startPt,startAdr,endPt,endAdr);

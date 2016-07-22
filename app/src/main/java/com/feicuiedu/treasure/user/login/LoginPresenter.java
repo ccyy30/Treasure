@@ -22,6 +22,7 @@ public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
      * 本类核心业务
      */
     public void login(User user) {
+        getView().showProgress();
         UserApi userApi = NetClient.getInstance().getUserApi();
         if (loginCall != null) loginCall.cancel();
         // 执行登陆请求构建出call模型

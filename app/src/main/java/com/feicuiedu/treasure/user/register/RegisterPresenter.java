@@ -24,6 +24,7 @@ public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> 
      * 本类核心业务
      */
     public void regiser(User user) {
+        getView().showProgress();
         UserApi userApi = NetClient.getInstance().getUserApi();
         registerCall = userApi.register(user);
         registerCall.enqueue(callback);
