@@ -203,6 +203,7 @@ public class MapFragment extends MvpFragment<MapMvpView, MapPresenter> implement
     private final BitmapDescriptor dot = BitmapDescriptorFactory.fromResource(R.drawable.treasure_dot);
     private final BitmapDescriptor iconExpanded = BitmapDescriptorFactory.fromResource(R.drawable.treasure_expanded);
     private boolean isFirstLocated = true; // 是否首次定位判断
+
     // 定位监听
     private final BDLocationListener locationListener = new BDLocationListener() {
         @Override public void onReceiveLocation(BDLocation bdLocation) {

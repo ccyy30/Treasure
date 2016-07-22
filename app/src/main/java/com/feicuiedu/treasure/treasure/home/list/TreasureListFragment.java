@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.feicuiedu.treasure.R;
 import com.feicuiedu.treasure.treasure.TreasureRepo;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 /**
  * 列表模式宝藏
  *
@@ -37,6 +39,7 @@ public class TreasureListFragment extends Fragment{
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         recyclerView = new RecyclerView(container.getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setBackgroundResource(R.drawable.screen_bg);
         return recyclerView;
     }
