@@ -21,7 +21,6 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
 import com.baidu.mapapi.navi.NaviParaOption;
 import com.baidu.mapapi.utils.OpenClientUtil;
@@ -119,10 +118,10 @@ public class TreasureDetailActivity extends MvpActivity<TreasureDetailView, Trea
             String endAdr = treasure.getLocation();
             switch (item.getItemId()) {
                 case R.id.walking_navi:
-                    startWalkingNavi(startPt,startAdr,endPt,endAdr);
+                    startWalkingNavi(startPt, startAdr, endPt, endAdr);
                     break;
                 case R.id.biking_navi:
-                    startBikingNavi(startPt, startAdr,endPt,endAdr);
+                    startBikingNavi(startPt, startAdr, endPt, endAdr);
                     break;
             }
             return false;
@@ -173,6 +172,19 @@ public class TreasureDetailActivity extends MvpActivity<TreasureDetailView, Trea
     }
 
     // -----------------------------
+
+    /**
+     * 启动百度地图导航(Web)
+     */
+    public void startWebNavi(LatLng startPt, String startAdr, LatLng endPt, String endAdr) {
+        // 构建 导航参数
+        NaviParaOption para = new NaviParaOption()
+                .startPoint(startPt).endPoint(endPt)
+                .startName(startAdr).endName(endAdr);
+
+        BaiduMapNavigation.openWebBaiduMapNavi(para, this);
+    }
+
     /**
      * 启动百度地图步行导航(Native)
      */
@@ -181,13 +193,15 @@ public class TreasureDetailActivity extends MvpActivity<TreasureDetailView, Trea
         NaviParaOption para = new NaviParaOption()
                 .startPoint(startPt).endPoint(endPt)
                 .startName(startAdr).endName(endAdr);
-        try {
-            BaiduMapNavigation.openBaiduMapWalkNavi(para, this);
-        } catch (BaiduMapAppNotSupportNaviException e) {
-            e.printStackTrace();
-            showDialog();
+//        try {
+//            BaiduMapNavigation.openBaiduMapWalkNavi(para, this);
+//        } catch (BaiduMapAppNotSupportNaviException e) {
+//            e.printStackTrace();
+//            showDialog();
+//        }
+        if (!BaiduMapNavigation.openBaiduMapWalkNavi(para, this)) {
+            startWebNavi(startPt, startAdr, endPt, endAdr);
         }
-
     }
 
     /**
@@ -198,11 +212,14 @@ public class TreasureDetailActivity extends MvpActivity<TreasureDetailView, Trea
         NaviParaOption para = new NaviParaOption()
                 .startPoint(startPt).endPoint(endPt)
                 .startName(startAdr).endName(endAdr);
+//        try {
+//            BaiduMapNavigation.openBaiduMapBikeNavi(para, this);
+//        } catch (BaiduMapAppNotSupportNaviException e) {
+//            e.printStackTrace();
+//            showDialog();
+//        }
 
-        try {
-            BaiduMapNavigation.openBaiduMapBikeNavi(para, this);
-        } catch (BaiduMapAppNotSupportNaviException e) {
-            e.printStackTrace();
+        if (!BaiduMapNavigation.openBaiduMapBikeNavi(para, this)) {
             showDialog();
         }
     }
